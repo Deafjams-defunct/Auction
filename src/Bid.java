@@ -1,22 +1,28 @@
+/*
+Emma Foster - November 2014
+Auction Bid
+Representation of a bid placed for an Item during an Auction.
+For Shawn at StreamingEdge.
+*/
 package com.emma.auction;
 
-import java.lang.Comparable; //For comparing in tests
-import java.util.Comparator; //For comparing in PriorityQueue
-import java.util.Date;
+import java.lang.Comparable; //For comparing in tests.
+import java.util.Comparator; //For comparing in PriorityQueue.
+import java.util.Date; //For storing the time this bid was submitted.
 
-public class Bid implements Comparator<Bid>, Comparable<Bid> {
+public class Bid implements Comparator<Bid>, Comparable<Bid> { //We're comparing Bids in all kinds of ways!
     
-    private Person bidder;
-    private int amount;
-    private Date timeSubmitted;
-    private boolean valid;
+    private Person bidder; //The actual person placing this Bid.
+    private int amount; //How much this bid was placed at, in whole dollars.
+    private Date timeSubmitted; //The time this Bid was submitted to an auction.
+    private boolean valid; //Wether or not this Bid is valid. See readme for more info on this.
     
     public Bid (Person inBidder, int inAmount) {
         
         this.bidder = inBidder;
         this.amount = inAmount >= 0 ? inAmount : 0; //We only want positive dollar values.
-        this.timeSubmitted = null;
-        this.valid = true;
+        this.timeSubmitted = null; //We haven't submitted this Bid to an auction yet, so we don't have a submit time.
+        this.valid = true; //we want our bids to be valid by default
         
     }
     
@@ -36,8 +42,6 @@ public class Bid implements Comparator<Bid>, Comparable<Bid> {
     
     //Fetch time this Bid was submitted to an Auction
     public Date timeSubmitted () {
-        
-        if (this.timeSubmitted == null) return new Date(0);
         
         return this.timeSubmitted;
         
@@ -79,7 +83,7 @@ public class Bid implements Comparator<Bid>, Comparable<Bid> {
     @Override
     public String toString () {
         
-        return "<Bid: " + this.bidder.toString() + ", Amount: " + amount + ">";
+        return "<Bid: " + this.bidder.toString() + ", Amount: " + this.amount + " Time Submitted: " + (this.timeSubmitted == null ? "N/A" : this.timeSubmitted.toString()) + " Valid?: " + this.valid + ">";
         
     }
     
@@ -87,7 +91,11 @@ public class Bid implements Comparator<Bid>, Comparable<Bid> {
     @Override
     public int compare (Bid firstBid, Bid secondBid) {
         
-        return secondBid.amount() - firstBid.amount(); //We really only care which bid is larger when comparing.
+        final int amountDifference = secondBid.amount() - firstBid.amount(); //We really only care which Bid is larger when comparing.
+        
+        if (amountDifference == 0) return secondBid.timeSubmitted().before(firstBid.timeSubmitted()) ? -1 : 1; //However, if we get two Bids which are exactly the same, we want to pick the Bid that was submitted first.
+        else return amountDifference;
+         
         
     }
     
