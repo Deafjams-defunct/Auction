@@ -7,6 +7,8 @@ Simply clone this repository, run `gradle build` on the cloned repository, and t
 
 Tested under Gradle 2.2 and JVM 1.6.0_65.
 
+Test results are available in `build/reports/tests/index.html`
+
 ##Classes Overview
 ###Item
 This is a representation of the actual items up for auction. Truly this is a wrapper for further expansion on the code. Right now items just have a name and a few randomly generated "qualities". Currently the randomly generated properties are:
